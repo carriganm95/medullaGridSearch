@@ -1,0 +1,42 @@
+# HTCondor submit file: one job per generated Medulla selection TOML.
+#
+# Usage:
+#   1) Generate TOMLs:
+#      python gridSearch/medulla_grid.py generate --base ... --params ... --outdir gridSearch/generated_medulla_tomls --max-jobs 100
+#   2) Submit from that outdir:
+#      cd gridSearch/generated_medulla_tomls
+#      ../condor/jobsub_submit_jobs.sh feature/carriganm95_working
+#
+# This submit file expects jobs.txt in the current directory.
+
+universe              = vanilla
++SingularityImage     = "/cvmfs/singularity.opensciencegrid.org/fermilab/fnal-wn-sl7:latest"
+executable            = ../condor/run_medulla_selection.sh
+arguments             = $(CFG) feature/carriganm95_working $(Process)
+
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+use_oauth_services     = icarus
+
+# Transfer the per-job TOML and the wrapper script.
+transfer_input_files  = ../condor/run_medulla_selection.sh,$(CFG)
+transfer_output_files = output_$(Process).root
+
+output                = logs/job_$(Cluster)_$(Process).out
+error                 = logs/job_$(Cluster)_$(Process).err
+log                   = logs/job_$(Cluster).log
+
+request_cpus          = 1
+request_memory        = 2000MB
+request_disk          = 25GB
+
++AccountingGroup = "group_icarus.micarrig"
++DESIRED_usage_model="DEDICATED,OPPORTUNISTIC,OFFSITE"
+
+requirements = target.machine =!= MachineAttrMachine1 && target.machine =!= MachineAttrMachine2 && (isUndefined(DesiredOS) || stringListsIntersect(toUpper(DesiredOS),IFOS_installed)) && (stringListsIntersect(toUpper(target.HAS_usage_model), toUpper(my.DESIRED_usage_model))) && (TARGET.HAS_Singularity==true)
+
+# Create logs/ if it doesn't exist (Condor doesn't do this automatically).
+# If your site doesn't allow this, pre-create logs/.
++PreCmd               = "mkdir -p logs"
+
+queue CFG from jobs.txt

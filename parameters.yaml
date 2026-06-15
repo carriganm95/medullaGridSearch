@@ -1,0 +1,68 @@
+
+
+parameters:
+  fiducial:
+    type: categorical
+    range: [0, 1]
+    branch: rFiducial
+    operator: "=="
+
+  shower_density:
+    type: float
+    range: [0.0, 2.0]
+    branch: rShowerDensity
+    operator: ">"
+
+  barycenter_dz:
+    type: float
+    range: [0.0, 200.0]
+    branch: rBarycenterDeltaZ
+    operator: "<"
+
+  barycenter_radius:
+    type: float
+    range: [0.0, 200.0]
+    branch: rBarycenterRadius
+    operator: "<"
+
+  shower_contained:
+    type: categorical
+    range: [0, 1]
+    branch: rShowerContained
+    operator: "=="
+
+  neurino_score:
+    type: float
+    range: [0.0, 1.0]
+    branch: rNeutrinoScore
+    operator: ">"
+
+  shower_length:
+    type: float
+    range: [0.0, 200.0]
+    branch: rShowerLength
+    operator: ">"
+
+  shower_dEdx:
+    type: float
+    range: [0.0, 50.0]
+    branch: rShowerDeDx
+    operator: "<"
+  
+  shower_Density:
+    type: float
+    range: [0.0, 5.0]
+    branch: rShowerDensity
+    operator: ">"
+
+  shower_conversionGap:
+    type: float
+    range: [0.0, 5.0]
+    branch: rShowerConversionGap
+    operator: "<"
+
+  track_length:
+    type: float
+    range: [0.0, 300.0]
+    branch: rLongestTrackLength
+    operator: "<"

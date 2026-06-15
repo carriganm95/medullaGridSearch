@@ -1,0 +1,47 @@
+# Parameter space for generating Medulla selection TOMLs.
+# Keys must match the `[parameters]` keys in the base selection TOML.
+#
+# Supported:
+# - type: float | int | categorical
+# - range: [min, max]        (for float/int)
+# - values: [a, b, c]        (for categorical)
+# - mode: random | grid      (optional; default: random)
+# - n: number of grid points (required for grid on float/int)
+#
+# Notes:
+# - For grid mode with multiple parameters, the cartesian product is used.
+#   Use `--max-jobs` in the generator to cap total outputs.
+
+parameters:
+  electron_threshold:
+    type: float
+    range: [0.0, 500.0]
+    mode: grid
+    n: 2
+
+  electron_softmax:
+    type: categorical
+    #values: [None, 0.60, 0.7, 0.8, 0.90]
+    values: [null, 0.8]
+    mode: grid
+
+  # primary_softmax:
+  #   type: categorical
+  #   values: [null, 0.8, 0.90, 0.95, 0.99]
+  #   mode: grid
+
+  # vertex_threshold:
+  #   type: categorical
+  #   values: [null, 2.0, 3.0, 3.5, 4.0, 5.0]
+  #   mode: grid
+
+  # muon_threshold:
+  #   type: categorical
+  #   values: [null, 0.0, 10, 25, 50, 100]
+  #   mode: grid
+
+# You can add others from `[parameters]` in the base TOML, e.g.
+#  vertex_threshold:
+#    type: float
+#    range: [2.0, 5.0]
+#    mode: random
